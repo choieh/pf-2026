@@ -209,6 +209,8 @@ js/
     <ul class="plain">
       <li>신규 사이트 제작에 아토믹 디자인 방식을 적용해 UI를 재사용 가능한 컴포넌트 구조로 구성했습니다.</li>
       <li>폼 그룹, 리스트, 카드, 댓글 등 반복 UI를 컴포넌트화하고 HTML·SCSS·JavaScript를 기능 단위로 모듈화했습니다.</li>
+      <li>SCSS 폴더 구조를 역할별로 세분화하고, 가능한 한 컴포넌트 단위로 스타일 코드를 재사용하도록 구성했습니다.</li>
+      <li>스타일과 구조를 바꿀 때 한 곳만 고치면 되도록 코드를 구조적으로 작성해, 유지보수가 원활하도록 했습니다.</li>
       <li>Vite와 SCSS 기반 개발 환경에서 UI와 스타일 코드를 관리했습니다.</li>
     </ul>
     <p class="note">해당 사이트는 이후 디자인이 전면 개편되어 현재 공개된 화면에서는 당시 구조를 확인할 수 없습니다. 아래는 같은 방식을 새로 작성한 예제입니다.</p>
@@ -256,11 +258,33 @@ js/
         </section>
       </div>
     </div>
+<h3>SCSS 폴더 구조 <span class="badge">재구성 예시</span></h3>
+    <p>스타일을 역할별 폴더로 나누고, 반복되는 UI는 <code>components/</code> 안에서 아토믹 단계별로 분리하는 구조입니다.</p>
 <pre><code>scss/
-  atoms/       _button.scss  _input.scss  _label.scss  _avatar.scss
-  molecules/   _form-field.scss  _comment.scss
-  organisms/   _comment-section.scss  _card-list.scss
-  pages/       (조합만 하고 새 스타일은 최소화)</code></pre>
+  abstracts/        _variables.scss  _mixins.scss  _functions.scss
+  vendors/          외부 라이브러리 스타일
+  base/             _reset.scss  _typography.scss
+  layout/           _header.scss  _footer.scss  _grid.scss
+  components/
+    atoms/          _button.scss  _input.scss  _label.scss  _avatar.scss
+    molecules/      _form-field.scss  _comment.scss
+    organisms/      _comment-section.scss  _card-list.scss
+  pages/            _home.scss  (페이지 전용 스타일만)
+  style.scss        부분 파일을 모아 불러오는 메인 파일</code></pre>
+    <ul class="plain">
+      <li><code>abstracts/</code>: 직접 컴파일되지 않고 다른 스타일에서 가져다 쓰는 변수, 믹스인, 함수</li>
+      <li><code>base/</code>, <code>layout/</code>: 리셋과 기본 태그 스타일, 헤더·푸터 같은 큰 틀</li>
+      <li><code>components/</code>: 독립적으로 재사용되는 UI 조각. 아토믹 단계별로 분리</li>
+      <li><code>pages/</code>: 특정 페이지에서만 쓰는 스타일</li>
+    </ul>
+<pre><code>// style.scss : 부분 파일(_로 시작)을 한곳에서 불러와 하나의 CSS로 컴파일
+@use 'abstracts/variables' as *;
+@use 'base/reset';
+@use 'layout/header';
+@use 'components/atoms/button';
+@use 'components/molecules/form-field';
+@use 'components/organisms/comment-section';
+@use 'pages/home';</code></pre>
     <p>각 단계는 한 방향으로만 조합합니다. 수정할 때 영향 범위가 아래 단계에서 위 단계로만 번지므로, 입력창 하나를 고치면 그 입력창을 쓰는 모든 화면이 함께 바뀌고 다른 요소는 건드리지 않게 됩니다.</p>
 
     <h3>그 외 공통 UI 경험</h3>
