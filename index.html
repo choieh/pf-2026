@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>최은혜 | 웹퍼블리셔 포트폴리오</title>
+<meta name="description" content="운영 중인 서비스의 UI 구조와 유지보수를 고려하는 웹퍼블리셔 최은혜의 포트폴리오">
+<style>
+:root{
+  --bg:#fafaf7; --surface:#fff; --text:#1c1f24; --muted:#565d68; --line:#dcdfe4;
+  --accent:#1d4ed8; --accent-soft:#e8eefc; --ok:#0f6b3c; --focus:#b45309;
+  --radius:10px; --maxw:880px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 -apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;word-break:keep-all}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0;background:#000;color:#fff;padding:.6rem 1rem;z-index:10}
+.skip:focus{left:8px;top:8px}
+header.site,main,footer{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+header.site{padding-top:28px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+header.site .brand{font-weight:700}
+nav ul{display:flex;flex-wrap:wrap;gap:4px 18px;list-style:none;margin:0;padding:0}
+nav a{text-decoration:none;color:var(--muted);padding:4px 2px}
+nav a:hover{color:var(--accent);text-decoration:underline}
+.hero{padding:56px 0 32px}
+.hero h1{font-size:clamp(1.7rem,4.5vw,2.4rem);line-height:1.35;margin:0 0 16px}
+.hero p{color:var(--muted);margin:0 0 8px;max-width:64ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:16px 0 0}
+.tags li{background:var(--accent-soft);color:#173a99;border-radius:99px;padding:2px 12px;font-size:.88rem}
+section{padding:36px 0;border-top:1px solid var(--line)}
+h2{font-size:1.5rem;margin:0 0 16px;line-height:1.4}
+h3{font-size:1.1rem;margin:24px 0 8px}
+.case-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0 20px}
+.case-meta div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px}
+.case-meta dt{font-size:.8rem;color:var(--muted)}
+.case-meta dd{margin:0;font-weight:600}
+.note{background:#fff8e6;border:1px solid #ecd9a0;border-radius:var(--radius);padding:10px 14px;font-size:.92rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+pre{background:#14181f;color:#e6e9ef;border-radius:var(--radius);padding:14px 16px;overflow:auto;font:.85rem/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;margin:8px 0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+p code,li code{background:#eceef2;padding:1px 6px;border-radius:4px}
+ul.plain{padding-left:1.2rem;margin:8px 0}
+ul.plain li{margin:4px 0}
+.badge{display:inline-block;font-size:.78rem;padding:1px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted);margin-left:6px;vertical-align:middle}
+button,.btn{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:8px 16px}
+button.ghost{background:var(--surface);color:var(--accent)}
+button:hover{filter:brightness(1.08)}
+/* 재현 데모 1: 모달 */
+dialog{border:1px solid var(--line);border-radius:var(--radius);padding:24px;max-width:420px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(10,14,20,.55)}
+dialog h4{margin:0 0 8px;font-size:1.1rem}
+.dlg-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+/* 재현 데모 2: 재생 컨트롤 */
+.player{background:#0f1218;color:#fff;border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.player .icon-btn{width:44px;height:44px;border-radius:50%;padding:0;display:grid;place-items:center;background:#fff;color:#0f1218;border-color:#fff}
+.player input[type=range]{flex:1;min-width:140px;accent-color:#7aa2ff}
+.player output{font-variant-numeric:tabular-nums;font-size:.9rem;min-width:88px;text-align:right}
+/* 재현 데모 3: 공통 컴포넌트 */
+.ui-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.ui-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.ui-card--accent{border-color:var(--accent)}
+.ui-card__title{margin:0 0 4px;font-size:1rem}
+.ui-card__meta{margin:0;color:var(--muted);font-size:.88rem}
+.ui-field{display:grid;gap:4px;margin-bottom:10px}
+.ui-field__label{font-size:.9rem;font-weight:600}
+.ui-field__input{font:inherit;padding:8px 10px;border:1px solid #8a919c;border-radius:6px}
+.ui-field__hint{font-size:.82rem;color:var(--muted)}
+.ui-comment{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.ui-comment:first-child{border-top:0}
+.ui-comment__avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;font-weight:700;color:#173a99}
+.ui-comment__name{font-weight:600;font-size:.92rem}
+.ui-comment__text{margin:0;font-size:.92rem}
+footer{padding:28px 20px 60px;color:var(--muted);font-size:.92rem;border-top:1px solid var(--line)}
+
+.overview-title{font-size:1rem;margin:28px 0 10px;color:var(--muted)}
+.overview{list-style:none;padding:0;margin:0 0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.overview a{display:grid;gap:2px;height:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;text-decoration:none;color:var(--text)}
+.overview a:hover{border-color:var(--accent)}
+.overview__no{font-size:.78rem;color:var(--accent);font-weight:700}
+.overview span:last-child{font-size:.88rem;color:var(--muted)}
+.atomic{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:start}
+.atomic__col h4{margin:0 0 10px;font-size:1rem}
+.atomic__col h4 small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+.atomic__stack{display:grid;gap:10px;justify-items:start}
+.atomic__arrow{align-self:center;color:var(--muted);font-size:1.4rem}
+.ui-label{font-size:.9rem;font-weight:600}
+.ui-input{font:inherit;width:100%;padding:8px 10px;border:1px solid #8a919c;border-radius:6px;background:#fff}
+.ui-btn{padding:6px 14px}
+.ui-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;font-weight:700;color:#173a99;flex:none}
+.ui-list{list-style:none;margin:0 0 10px;padding:0}
+.ui-form{display:grid;gap:8px;justify-items:start}
+.ui-comment{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:8px 0}
+footer .footer-title{font-size:1.1rem;margin:0 0 10px;color:var(--text)}
+.career{list-style:none;padding:0;margin:0 0 14px}
+.career li{padding:4px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:10px}
+.career span{color:var(--text);font-variant-numeric:tabular-nums}
+@media (max-width:720px){
+  .atomic{grid-template-columns:1fr}
+  .atomic__arrow{transform:rotate(90deg);justify-self:center}
+  .career li{grid-template-columns:1fr;gap:0}
+}
+@media print{
+  .skip,nav,footer{display:none!important}
+  body{background:#fff;font-size:11pt}
+  section{padding:20px 0}
+  h2,h3{break-after:avoid}
+  .box,.case-meta div{break-inside:avoid}
+  pre{white-space:pre-wrap}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+
+<header class="site">
+  <span class="brand">최은혜 · 웹퍼블리셔</span>
+  <nav aria-label="포트폴리오 목차">
+    <ul>
+      <li><a href="#about">소개</a></li>
+      <li><a href="#case1">레거시 구조 개선</a></li>
+      <li><a href="#case2">아토믹 컴포넌트</a></li>
+      <li><a href="#case3">웹접근성 · Video.js</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <div class="hero" id="about">
+    <h1>운영 중인 서비스의 UI 구조와 유지보수를 고려하는 웹퍼블리셔 최은혜입니다.</h1>
+    <p>웹퍼블리셔 6년 2개월 · 교육, 커머스, 게임, 간편결제, 웹 에디터 서비스의 UI 구축과 운영</p>
+    <ul class="tags" aria-label="주요 기술">
+      <li>HTML5</li><li>CSS3 / SCSS</li><li>JavaScript</li><li>jQuery</li><li>React</li><li>Vite / Gulp</li><li>Git / SVN</li><li>웹접근성</li>
+    </ul>
+    <h2 class="overview-title">이 포트폴리오에서 다루는 것</h2>
+    <ol class="overview">
+      <li><a href="#case1"><span class="overview__no">Case 1</span><strong>레거시 UI 코드 구조 개선</strong><span>기능별 분리로 수정 범위를 파악하기 쉽게</span></a></li>
+      <li><a href="#case2"><span class="overview__no">Case 2</span><strong>아토믹 디자인 기반 컴포넌트</strong><span>신규 사이트의 반복 UI를 단계별로 구성</span></a></li>
+      <li><a href="#case3"><span class="overview__no">Case 3</span><strong>웹접근성 개선 · 비디오 모듈</strong><span>키보드 접근, 대체 텍스트, 포커스 처리</span></a></li>
+    </ol>
+    <p class="note">“재현 예제”는 회사 코드를 쓰지 않고 업무에서 다룬 패턴을 새로 작성한 것입니다. 실제 화면과 코드는 공개 가능한 범위만 다룹니다.</p>
+  </div>
+
+  <!-- CASE 1 -->
+  <section id="case1" aria-labelledby="case1-title">
+    <h2 id="case1-title">Case 1. 레거시 UI 코드의 기능별 구조 개선</h2>
+    <dl class="case-meta">
+      <div><dt>회사 / 기간</dt><dd>(주)모두의교육그룹 · 2024.07 ~ 2025.12<br>(주)바른컴퍼니 · 2023.08 ~ 2024.02</dd></div>
+      <div><dt>담당 / 기여도</dt><dd>웹퍼블리셔 · 모두의교육그룹 1명 100%, 바른컴퍼니 2명 80%</dd></div>
+      <div><dt>개발환경</dt><dd>HTML, CSS, SCSS, PHP, JavaScript, jQuery</dd></div>
+    </dl>
+
+    <h3>배경과 문제</h3>
+    <p>프로모션 페이지와 패밀리 사이트를 운영하면서 기존 레거시 UI 코드를 계속 수정해야 했습니다. 수정 범위를 파악하기 어려우면 작은 변경도 다른 화면에 영향을 줄 수 있어, 코드를 기능별로 나누고 구조화하는 작업이 필요했습니다.</p>
+
+    <h3>제가 한 일</h3>
+    <ul class="plain">
+      <li>기존 레거시 코드를 분석하고 기능별로 분리하여 수정과 유지보수가 쉬운 구조로 개선했습니다.</li>
+      <li>사용자 편의성을 고려한 UI 개선과 운영 중 발생하는 UI 이슈 대응을 함께 담당했습니다.</li>
+    </ul>
+
+    <h3>구조 개선 방식 <span class="badge">재구성 예시</span></h3>
+    <p>아래는 실제 파일이 아니라, 기능 단위 분리 방식을 이해하기 쉽게 다시 그린 예시입니다.</p>
+    <div class="compare">
+      <div>
+        <strong>Before</strong>
+        <pre><code>css/
+  style.css        /* 모든 페이지 스타일이 한 파일 */
+js/
+  common.js        /* 페이지별 동작이 뒤섞임 */</code></pre>
+      </div>
+      <div>
+        <strong>After</strong>
+        <pre><code>scss/
+  base/            /* reset, 변수 */
+  components/      /* button, form, card ... */
+  pages/           /* 페이지별 스타일 */
+js/
+  modules/         /* 기능별 모듈 (탭, 팝업 ...) */</code></pre>
+      </div>
+    </div>
+
+    <h3>운영 사이트</h3>
+    <ul class="plain">
+      <li><a href="https://modulearning.kr/main/" target="_blank" rel="noopener">modulearning.kr<span class="sr-only"> (새 창)</span></a></li>
+      <li><a href="https://modube.kr/" target="_blank" rel="noopener">modube.kr</a></li>
+      <li><a href="https://krcls.kr/main/" target="_blank" rel="noopener">krcls.kr</a></li>
+      <li><a href="https://www.barunsoncard.com/" target="_blank" rel="noopener">barunsoncard.com</a>, <a href="https://www.premierpaper.co.kr/" target="_blank" rel="noopener">premierpaper.co.kr</a>, <a href="https://www.deardeer.kr/" target="_blank" rel="noopener">deardeer.kr</a></li>
+    </ul>
+    <p class="note">개선 전후의 실제 화면과 코드는 공개 가능 여부를 확인한 뒤 추가할 수 있습니다.</p>
+  </section>
+
+  <!-- CASE 2 -->
+  <section id="case2" aria-labelledby="case2-title">
+    <h2 id="case2-title">Case 2. 아토믹 디자인 기반 컴포넌트 구조화</h2>
+    <dl class="case-meta">
+      <div><dt>회사 / 기간</dt><dd>(주)모두의교육그룹 · 2024.07 ~ 2025.12</dd></div>
+      <div><dt>담당 / 기여도</dt><dd>웹퍼블리셔 · 1명 100%</dd></div>
+      <div><dt>개발환경</dt><dd>HTML, CSS, SCSS, JavaScript, Vite</dd></div>
+    </dl>
+
+    <h3>배경과 문제</h3>
+    <p>신규 사이트를 제작하면서 폼 그룹, 리스트, 카드, 댓글처럼 여러 화면에서 반복되는 UI를 화면마다 따로 만들면, 수정할 때 모든 곳을 찾아 고쳐야 합니다. 그래서 UI를 <strong>아토믹 디자인</strong> 방식으로 나누어 구성했습니다.</p>
+
+    <h3>제가 한 일</h3>
+    <ul class="plain">
+      <li>신규 사이트 제작에 아토믹 디자인 방식을 적용해 UI를 재사용 가능한 컴포넌트 구조로 구성했습니다.</li>
+      <li>폼 그룹, 리스트, 카드, 댓글 등 반복 UI를 컴포넌트화하고 HTML·SCSS·JavaScript를 기능 단위로 모듈화했습니다.</li>
+      <li>Vite와 SCSS 기반 개발 환경에서 UI와 스타일 코드를 관리했습니다.</li>
+    </ul>
+    <p class="note">해당 사이트는 이후 디자인이 전면 개편되어 현재 공개된 화면에서는 당시 구조를 확인할 수 없습니다. 아래는 같은 방식을 새로 작성한 예제입니다.</p>
+
+    <h3>아토믹 디자인 구조 <span class="badge">재현 예제</span></h3>
+    <p>가장 작은 단위(Atoms)를 조합해 Molecules, Organisms로 올라가는 구조입니다. 아래 화면은 같은 원자를 조합해 만든 결과입니다.</p>
+    <div class="box atomic">
+      <div class="atomic__col">
+        <h4>Atoms <small>더 쪼갤 수 없는 요소</small></h4>
+        <div class="atomic__stack">
+          <span class="ui-label">이름</span>
+          <input class="ui-input" type="text" aria-label="Atoms 예제: 입력창" placeholder="입력창">
+          <button type="button" class="ui-btn">버튼</button>
+          <span class="ui-avatar" aria-hidden="true">김</span>
+        </div>
+      </div>
+      <div class="atomic__arrow" aria-hidden="true">→</div>
+      <div class="atomic__col">
+        <h4>Molecules <small>원자의 조합</small></h4>
+        <div class="atomic__stack">
+          <div class="ui-field">
+            <label class="ui-field__label" for="mol-name">이름</label>
+            <input class="ui-input" id="mol-name" type="text" autocomplete="off" aria-describedby="mol-hint">
+            <span class="ui-field__hint" id="mol-hint">라벨 + 입력창 + 안내 문구</span>
+          </div>
+          <div class="ui-comment"><span class="ui-avatar" aria-hidden="true">이</span><div><div class="ui-comment__name">이OO</div><p class="ui-comment__text">아바타 + 이름 + 내용</p></div></div>
+        </div>
+      </div>
+      <div class="atomic__arrow" aria-hidden="true">→</div>
+      <div class="atomic__col">
+        <h4>Organisms <small>분자의 조합</small></h4>
+        <section class="ui-card" aria-label="댓글 영역 예제">
+          <h5 class="ui-card__title">댓글 영역</h5>
+          <ul class="ui-list">
+            <li class="ui-comment"><span class="ui-avatar" aria-hidden="true">김</span><div><div class="ui-comment__name">김OO</div><p class="ui-comment__text">댓글 목록</p></div></li>
+            <li class="ui-comment"><span class="ui-avatar" aria-hidden="true">이</span><div><div class="ui-comment__name">이OO</div><p class="ui-comment__text">같은 분자를 반복합니다</p></div></li>
+          </ul>
+          <form class="ui-form" onsubmit="return false" aria-label="댓글 작성 예제">
+            <div class="ui-field">
+              <label class="ui-field__label" for="org-text">댓글</label>
+              <input class="ui-input" id="org-text" type="text" autocomplete="off">
+            </div>
+            <button type="submit" class="ui-btn">등록</button>
+          </form>
+        </section>
+      </div>
+    </div>
+<pre><code>scss/
+  atoms/       _button.scss  _input.scss  _label.scss  _avatar.scss
+  molecules/   _form-field.scss  _comment.scss
+  organisms/   _comment-section.scss  _card-list.scss
+  pages/       (조합만 하고 새 스타일은 최소화)</code></pre>
+    <p>각 단계는 한 방향으로만 조합합니다. 수정할 때 영향 범위가 아래 단계에서 위 단계로만 번지므로, 입력창 하나를 고치면 그 입력창을 쓰는 모든 화면이 함께 바뀌고 다른 요소는 건드리지 않게 됩니다.</p>
+
+    <h3>그 외 공통 UI 경험</h3>
+    <ul class="plain">
+      <li>NAVER Smart Editor(4명 75%): React 기반 프로젝트에서 재사용 가능한 UI 컴포넌트를 작업하고 관리했습니다.</li>
+      <li>NHN 서비스(5명 50%): 공통 UI 컴포넌트를 개발·관리하고 유지보수를 고려한 UI 작업 프로세스를 개선했습니다.</li>
+    </ul>
+  </section>
+
+  <!-- CASE 3 -->
+  <section id="case3" aria-labelledby="case3-title">
+    <h2 id="case3-title">Case 3. 웹접근성 개선과 학습용 비디오 모듈 UI</h2>
+    <dl class="case-meta">
+      <div><dt>회사 / 기간</dt><dd>(주)모두의교육그룹 · 2024.07 ~ 2025.12</dd></div>
+      <div><dt>담당 / 기여도</dt><dd>웹퍼블리셔 · 1명 100%</dd></div>
+      <div><dt>개발환경</dt><dd>HTML, CSS, SCSS, JavaScript, jQuery, Video.js</dd></div>
+    </dl>
+
+    <h3>배경과 문제</h3>
+    <p>학습 서비스에서는 마우스를 쓰기 어려운 사용자도 같은 기능을 이용할 수 있어야 합니다. 화면이 보이는 대로 동작하는 것만으로는 부족해서, 키보드 접근과 대체 텍스트, 포커스 처리를 기준으로 UI 구조와 인터랙션을 점검했습니다.</p>
+
+    <h3>제가 한 일</h3>
+    <ul class="plain">
+      <li>웹접근성을 고려해 UI 구조와 인터랙션을 개선했습니다. (키보드 접근, 대체 텍스트, 포커스 처리)</li>
+      <li>Video.js를 서비스 특성에 맞게 커스터마이징하여 학습용 비디오 모듈 UI를 작업했습니다.</li>
+    </ul>
+
+    <h3>재현 예제 1: 키보드로 이용하는 팝업 <span class="badge">직접 작성</span></h3>
+    <p>팝업을 열면 포커스가 팝업 안으로 이동하고, <kbd>Esc</kbd>로 닫으면 팝업을 연 버튼으로 돌아옵니다.</p>
+    <div class="box">
+      <button type="button" id="open-dialog">팝업 열기</button>
+      <dialog id="demo-dialog" aria-labelledby="dlg-title" aria-describedby="dlg-desc">
+        <h4 id="dlg-title">수강 안내</h4>
+        <p id="dlg-desc">Tab 키로 팝업 안의 버튼만 이동합니다. Esc 키 또는 닫기 버튼으로 닫을 수 있습니다.</p>
+        <div class="dlg-actions">
+          <button type="button" class="ghost" id="dlg-cancel">닫기</button>
+          <button type="button" id="dlg-ok">확인</button>
+        </div>
+      </dialog>
+    </div>
+<pre><code>opener.addEventListener('click', () =&gt; dialog.showModal());   // 포커스가 팝업 안으로 이동
+dialog.addEventListener('close', () =&gt; opener.focus());       // 닫으면 열었던 버튼으로 복귀</code></pre>
+
+    <h3>재현 예제 2: 재생 컨트롤의 이름과 상태 <span class="badge">직접 작성</span></h3>
+    <p>아이콘만 있는 버튼도 스크린 리더가 읽을 수 있는 이름이 있어야 하고, 재생 상태는 <code>aria-pressed</code>로 전달합니다. 실제 영상 대신 타이머로 동작을 흉내 낸 예제입니다.</p>
+    <div class="box">
+      <div class="player" role="group" aria-label="비디오 컨트롤 예제">
+        <button type="button" class="icon-btn" id="play-btn" aria-pressed="false" aria-label="재생">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path id="play-icon" d="M6 3l11 7-11 7z" fill="currentColor"/></svg>
+        </button>
+        <label for="seek" class="sr-only">재생 위치</label>
+        <input type="range" id="seek" min="0" max="60" value="0" step="1">
+        <output for="seek" id="time" aria-live="off">0:00 / 1:00</output>
+      </div>
+    </div>
+<pre><code>&lt;button type="button" aria-pressed="false" aria-label="재생"&gt;
+  &lt;svg aria-hidden="true" focusable="false"&gt;...&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+
+    <h3>재현 예제 3: 이미지의 대체 텍스트 <span class="badge">직접 작성</span></h3>
+    <div class="compare">
+      <div class="box">
+        <strong>의미가 있는 이미지</strong>
+        <pre><code>&lt;img src="chart.png" alt="월별 수강 인원 추이 그래프"&gt;</code></pre>
+        <p>내용을 대신 설명하는 문장을 넣습니다.</p>
+      </div>
+      <div class="box">
+        <strong>장식용 이미지</strong>
+        <pre><code>&lt;img src="line.png" alt=""&gt;</code></pre>
+        <p>정보가 없으면 빈 <code>alt</code>로 읽지 않게 합니다.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <h2 class="footer-title">경력</h2>
+  <ul class="career">
+    <li><span>2024.07 ~ 2025.12</span>(주)모두의교육그룹 IT팀</li>
+    <li><span>2023.08 ~ 2024.02</span>(주)바른컴퍼니 개발팀</li>
+    <li><span>2023.06 ~ 2023.08</span>세종큐비즈(주) 인터넷사업부</li>
+    <li><span>2019.05 ~ 2022.07</span>주식회사하이브랩 FT개발실 (NHN 서비스, PAYCO, NAVER Smart Editor, 영풍문고)</li>
+    <li><span>2018.06 ~ 2019.01</span>새이온주식회사</li>
+  </ul>
+  <p>연락처는 지원 사이트의 이력서에 기재되어 있습니다.</p>
+</footer>
+
+<style>.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
+<script>
+(function () {
+  // 팝업 예제
+  var dialog = document.getElementById('demo-dialog');
+  var opener = document.getElementById('open-dialog');
+  opener.addEventListener('click', function () { dialog.showModal(); });
+  dialog.addEventListener('close', function () { opener.focus(); });
+  document.getElementById('dlg-cancel').addEventListener('click', function () { dialog.close(); });
+  document.getElementById('dlg-ok').addEventListener('click', function () { dialog.close(); });
+
+  // 재생 컨트롤 예제
+  var btn = document.getElementById('play-btn');
+  var icon = document.getElementById('play-icon');
+  var seek = document.getElementById('seek');
+  var time = document.getElementById('time');
+  var timer = null;
+  var PLAY = 'M6 3l11 7-11 7z';
+  var PAUSE = 'M5 3h4v14H5zM11 3h4v14h-4z';
+
+  function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function render() { time.textContent = fmt(Number(seek.value)) + ' / 1:00'; }
+  function setPlaying(on) {
+    btn.setAttribute('aria-pressed', String(on));
+    btn.setAttribute('aria-label', on ? '일시정지' : '재생');
+    icon.setAttribute('d', on ? PAUSE : PLAY);
+    clearInterval(timer);
+    if (on) {
+      timer = setInterval(function () {
+        if (Number(seek.value) >= 60) { setPlaying(false); return; }
+        seek.value = Number(seek.value) + 1;
+        render();
+      }, 1000);
+    }
+  }
+  btn.addEventListener('click', function () { setPlaying(btn.getAttribute('aria-pressed') !== 'true'); });
+  seek.addEventListener('input', render);
+})();
+</script>
+</body>
+</html>
